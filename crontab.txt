@@ -1,0 +1,1 @@
+*/5 * * * * /usr/bin/php /YOUR_CORRECT_DIRECTORY_PATH/public_html/specials_cron.php >> /YOUR_CORRECT_DIRECTORY_PATH/radio/specials_cron.log 2>&1
