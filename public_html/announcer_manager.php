@@ -517,13 +517,16 @@ foreach ($directories as $dir) {
             form.method = 'POST';
             form.style.display = 'none';
             
-            const csrfToken = document.querySelector('input[name="csrf_token"]');
+            // Get CSRF token from the modal form (more reliable)
+            const csrfToken = document.querySelector('form input[name="csrf_token"]');
             if (csrfToken) {
                 const csrfInput = document.createElement('input');
                 csrfInput.type = 'hidden';
                 csrfInput.name = 'csrf_token';
                 csrfInput.value = csrfToken.value;
                 form.appendChild(csrfInput);
+            } else {
+                console.error('CSRF token not found - form submission may fail');
             }
             
             const actionInput = document.createElement('input');

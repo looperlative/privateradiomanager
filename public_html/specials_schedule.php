@@ -24,6 +24,7 @@
 require_once 'config.php';
 require_once 'includes/Auth.php';
 require_once 'includes/Database.php';
+require_once 'includes/CSRF.php';
 
 $auth = new Auth();
 $auth->requireAdmin();
@@ -130,6 +131,7 @@ function getTimesForDay() {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    CSRF::validateRequest();
     $action = $_POST['action'] ?? '';
 
     switch ($action) {
@@ -284,6 +286,7 @@ $times = getTimesForDay();
         <div class="card">
             <h2>Schedule a Special Program (Local Time)</h2>
             <form method="POST" id="schedule-form">
+                <?php echo CSRF::getTokenInput(); ?>
                 <input type="hidden" name="action" value="schedule_special">
                 <input type="hidden" name="date_utc" id="date_utc" value="">
                 <input type="hidden" name="time_utc" id="time_utc" value="">
@@ -347,6 +350,7 @@ $times = getTimesForDay();
                                 <td>
                                     <?php if ($row['status'] === 'scheduled'): ?>
                                         <form method="POST" style="margin:0;">
+                                            <?php echo CSRF::getTokenInput(); ?>
                                             <input type="hidden" name="action" value="cancel_schedule">
                                             <input type="hidden" name="schedule_id" value="<?php echo (int)$row['id']; ?>">
                                             <button type="submit" class="btn btn-danger" onclick="return confirm('Cancel this schedule entry?');">Cancel</button>
