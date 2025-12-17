@@ -1,0 +1,301 @@
+/**
+ * Copyright (c) 2025 Robert Amstadt
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+/* Manager Pages (File Manager, Announcer Manager) - Compact Layout */
+body {
+    padding: 10px;
+    font-size: 13px;
+}
+
+.container {
+    max-width: none;
+    margin: 0;
+    width: 100%;
+}
+
+.header {
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    font-size: 1.4em;
+}
+
+.nav-links {
+    gap: 8px;
+}
+
+.nav-links a {
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.logout-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.card {
+    padding: 12px;
+    margin-bottom: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card h2 {
+    margin: 0 0 8px 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 4px;
+    font-size: 1.3em;
+}
+
+.upload-section {
+    background: #f8f9fa;
+    padding: 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.upload-section h3 {
+    margin: 0 0 6px 0;
+    font-size: 1.1em;
+}
+
+.form-group {
+    margin-bottom: 4px;
+}
+
+.form-group label {
+    margin-bottom: 3px;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.form-group input,
+.form-group select {
+    padding: 6px;
+    font-size: 12px;
+}
+
+.btn {
+    padding: 6px 12px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    font-size: 12px;
+}
+
+.btn-small {
+    padding: 3px 8px;
+    font-size: 10px;
+}
+
+.directory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.directory-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.directory-header {
+    background: #3498db;
+    color: white;
+    padding: 8px 12px;
+    font-weight: 600;
+    text-transform: capitalize;
+    font-size: 12px;
+}
+
+.directory-content {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 400px;
+    min-height: 200px;
+    position: relative;
+}
+
+.file-item {
+    padding: 6px 10px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 40px;
+    cursor: grab;
+    user-select: none;
+}
+
+.file-item:last-child {
+    border-bottom: none;
+}
+
+.file-item:hover {
+    background: #f8f9fa;
+}
+
+.file-item.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+}
+
+.directory-card.drag-over {
+    background: #e3f2fd;
+    border: 2px dashed #3498db;
+}
+
+.drop-zone {
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-style: italic;
+    border: 2px dashed transparent;
+    transition: all 0.3s ease;
+    position: sticky;
+    bottom: 0;
+    background: white;
+    margin-top: auto;
+}
+
+.drop-zone.drag-over {
+    border-color: #3498db;
+    background: #e3f2fd;
+    color: #3498db;
+}
+
+.file-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.file-name {
+    font-weight: 600;
+    margin-bottom: 1px;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.artist-name {
+    color: #3498db;
+    font-weight: 700;
+}
+
+.file-meta {
+    font-size: 10px;
+    color: #666;
+    line-height: 1.2;
+}
+
+.file-actions {
+    display: flex;
+    gap: 3px;
+    flex-shrink: 0;
+}
+
+.message {
+    padding: 10px;
+    margin-bottom: 12px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+.message.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.modal-content h2 {
+    font-size: 1.2em;
+}
+
+.close {
+    font-size: 20px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.stat-card {
+    background: white;
+    padding: 6px;
+    border-radius: 4px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.stat-number {
+    font-size: 18px;
+    font-weight: bold;
+    color: #3498db;
+}
+
+.stat-label {
+    font-size: 10px;
+    color: #666;
+    text-transform: uppercase;
+    margin-top: 2px;
+}
+
+.upload-grid {
+    display: grid;
+    grid-template-columns: 1fr 180px 100px;
+    gap: 10px;
+    align-items: end;
+}
+
+.upload-note {
+    margin-top: 3px;
+    font-size: 10px;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .upload-grid {
+        grid-template-columns: 1fr;
+    }
+    .directory-grid {
+        grid-template-columns: 1fr;
+    }
+}

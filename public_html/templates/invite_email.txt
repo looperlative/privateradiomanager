@@ -1,0 +1,17 @@
+Hello,
+
+{{INVITER_USERNAME}} has invited you to join {{SITE_NAME}}.
+
+To create your account, please visit:
+{{INVITE_URL}}
+
+This invitation link will remain valid for {{EXPIRY_DAYS}} days.
+
+After registering, you will have access to our private radio stream and can view the current playlist and track history.
+
+If you have any questions, please contact {{INVITER_USERNAME}} directly.
+
+Best regards,
+{{SITE_NAME}}
+
+Note: If you did not expect this invitation, you may disregard this message.

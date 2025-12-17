@@ -1,0 +1,107 @@
+# Main .htaccess
+# Security and access control
+
+# Deny access to sensitive configuration files
+<Files "config.php">
+    Require all denied
+</Files>
+
+<Files "setup_database.sql">
+    Require all denied
+</Files>
+
+<Files "install.php">
+    Require all denied
+</Files>
+
+<Files "specials_cron.php">
+    Require all denied
+</Files>
+
+# Deny access to any .htaccess files
+<Files ".htaccess">
+    Require all denied
+</Files>
+
+# Deny access to any .htpasswd files
+<Files ".htpasswd*">
+    Require all denied
+</Files>
+
+# Deny access to backup files and temporary files
+<FilesMatch "\.(bak|backup|tmp|temp|log|old|orig|save|swp|swo)$">
+    Require all denied
+</FilesMatch>
+
+# Deny access to shell scripts
+<FilesMatch "\.(sh|bash|zsh|csh|ksh)$">
+    Require all denied
+</FilesMatch>
+
+# URL rewrite rules for security
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Deny access to version control directories
+    RewriteRule ^\.git - [F,L]
+    RewriteRule ^\.svn - [F,L]
+    
+    # Disable PHP execution in upload directories (if any are added later)
+    RewriteRule ^uploads/.*\.php$ - [F,L]
+</IfModule>
+
+# Deny access to composer files
+<Files "composer.json">
+    Require all denied
+</Files>
+
+<Files "composer.lock">
+    Require all denied
+</Files>
+
+# Deny access to README and documentation files
+<FilesMatch "^(README|CHANGELOG|LICENSE|INSTALL)(\.(md|txt|rst))?$">
+    Require all denied
+</FilesMatch>
+
+# Security headers
+<IfModule mod_headers.c>
+    # Prevent clickjacking
+    Header always append X-Frame-Options SAMEORIGIN
+    
+    # Prevent MIME type sniffing
+    Header always set X-Content-Type-Options nosniff
+    
+    # Enable XSS protection
+    Header always set X-XSS-Protection "1; mode=block"
+    
+    # Referrer policy
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    
+    # Content Security Policy (basic)
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self';"
+</IfModule>
+
+# Note: ServerTokens and ServerSignature must be set in main Apache config
+# ServerTokens Prod
+# ServerSignature Off
+
+# Prevent access to PHP error logs
+<Files "error_log">
+    Require all denied
+</Files>
+
+<Files "php_errors.log">
+    Require all denied
+</Files>
+
+# Force HTTPS (uncomment if SSL is configured)
+# <IfModule mod_rewrite.c>
+#     RewriteEngine On
+#     RewriteCond %{HTTPS} off
+#     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# </IfModule>
+
+# Disable directory browsing
+Options -Indexes
+

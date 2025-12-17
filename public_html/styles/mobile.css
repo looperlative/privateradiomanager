@@ -1,0 +1,149 @@
+/**
+ * Copyright (c) 2025 Robert Amstadt
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+/* Mobile Responsive Styles */
+
+/* Base Mobile Fixes */
+html {
+    box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+/* Media Elements */
+img,
+video {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Tables */
+table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+/* Form Elements */
+input,
+select,
+textarea,
+button {
+    max-width: 100%;
+}
+
+/* Mobile-Specific Styles (768px and below) */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .user-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+        max-width: 100% !important;
+    }
+
+    .card {
+        padding: 16px;
+    }
+
+    .main-content {
+        grid-template-columns: 1fr !important;
+    }
+
+    a.logout-btn,
+    .logout-btn,
+    button.btn,
+    .btn {
+        padding: 12px 14px;
+        font-size: 16px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="date"],
+    select {
+        padding: 12px;
+        font-size: 16px;
+    }
+
+    .table,
+    table {
+        max-width: 100%;
+    }
+
+    .table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table th,
+    .table td {
+        white-space: nowrap;
+    }
+
+    .table td button.btn {
+        display: block;
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .track-item {
+        min-width: 0;
+    }
+
+    .track-item strong,
+    .track-item small {
+        overflow-wrap: anywhere;
+    }
+}
+
+/* Extra Small Devices (420px and below) */
+@media (max-width: 420px) {
+    .logo {
+        font-size: 1.4em;
+    }
+}

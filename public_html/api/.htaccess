@@ -1,0 +1,19 @@
+# Protect API directory
+# Only allow access to specific PHP files, deny everything else
+
+# Allow API endpoints
+<Files "tracks.php">
+    Require all granted
+</Files>
+
+# Deny access to any other files
+<FilesMatch "^(?!tracks\.php$).*">
+    Require all denied
+</FilesMatch>
+
+# Security headers for API responses
+<IfModule mod_headers.c>
+    Header always set Content-Type "application/json"
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options DENY
+</IfModule>

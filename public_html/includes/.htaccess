@@ -1,0 +1,8 @@
+# Protect includes directory
+# Deny all direct access to PHP include files
+
+Require all denied
+
+# Alternative method for older Apache versions
+# Order Deny,Allow
+# Deny from all

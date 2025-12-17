@@ -1,0 +1,8 @@
+# Protect templates directory
+# Deny all direct access to template files
+
+Require all denied
+
+# Alternative method for older Apache versions
+# Order Deny,Allow
+# Deny from all
