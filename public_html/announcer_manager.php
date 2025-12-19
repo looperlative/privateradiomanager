@@ -41,6 +41,20 @@ $directories = ['announcers', 'announcers_inactive'];
 // Allowed audio file extensions
 $allowedExtensions = ['mp3', 'wav', 'flac', 'ogg', 'aac', 'm4a'];
 
+// Logging function for upload processing
+function logUploadProcessing($message) {
+    $homeDir = getHomeDirectory();
+    if (empty($homeDir)) {
+        error_log("Unable to determine home directory for upload processing log");
+        return;
+    }
+    
+    $logFile = $homeDir . '/.privateradiomanager/upload_processing.log';
+    $timestamp = date('Y-m-d H:i:s');
+    $logMessage = "[{$timestamp}] {$message}\n";
+    file_put_contents($logFile, $logMessage, FILE_APPEND | LOCK_EX);
+}
+
 // Handle file operations
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     CSRF::validateRequest();
@@ -87,6 +101,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $uploadErrors = [];
                 $successCount = 0;
                 $mp3Count = 0;
+                $uploadedMp3Files = [];
+                $uploadedAudioFiles = [];
                 
                 // Handle multiple files
                 if (is_array($_FILES['audio_file']['name'])) {
@@ -113,8 +129,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         chmod($targetPath, 0644);
                                         $uploadResults[] = $filename;
                                         $successCount++;
+                                        $uploadedAudioFiles[] = $targetPath;
                                         if ($fileExtension === 'mp3') {
                                             $mp3Count++;
+                                            $uploadedMp3Files[] = $targetPath;
                                         }
                                     } else {
                                         $uploadErrors[] = "Failed to upload '{$filename}'";
@@ -145,8 +163,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     chmod($targetPath, 0644);
                                     $uploadResults[] = $filename;
                                     $successCount++;
+                                    $uploadedAudioFiles[] = $targetPath;
                                     if ($fileExtension === 'mp3') {
                                         $mp3Count++;
+                                        $uploadedMp3Files[] = $targetPath;
                                     }
                                 } else {
                                     $uploadErrors[] = "Failed to upload '{$filename}'";
@@ -162,12 +182,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
                 
-                // Run ID3 tag fix script if MP3 files were uploaded
-                if ($mp3Count > 0) {
+                // Process uploaded MP3 files for ID3 fixes
+                if (!empty($uploadedMp3Files)) {
                     $fixScriptPath = FIX_ID3_SCRIPT;
-                    if (is_string($fixScriptPath) && $fixScriptPath !== '' && file_exists($fixScriptPath)) {
-                        $command = escapeshellcmd($fixScriptPath) . ' ' . escapeshellarg($radioPath . '/' . $targetDir);
-                        exec($command . ' 2>&1', $output, $returnCode);
+                    $fixedCount = 0;
+                    
+                    foreach ($uploadedMp3Files as $mp3File) {
+                        logUploadProcessing("Processing MP3 file for ID3 fixes: {$mp3File}");
+                        
+                        // Run ID3 fix script on individual file
+                        if (is_string($fixScriptPath) && $fixScriptPath !== '' && file_exists($fixScriptPath)) {
+                            $command = escapeshellcmd($fixScriptPath) . ' ' . escapeshellarg($mp3File);
+                            exec($command . ' 2>&1', $fixOutput, $fixReturnCode);
+                            
+                            if (!empty($fixOutput)) {
+                                logUploadProcessing("fix_id3_tags.sh output: " . implode("\n", $fixOutput));
+                            }
+                            logUploadProcessing("fix_id3_tags.sh exit code: {$fixReturnCode}");
+                            
+                            if ($fixReturnCode === 0) {
+                                $fixedCount++;
+                            }
+                            unset($fixOutput);
+                        }
+                    }
+                }
+                
+                // Process all uploaded audio files with cue_file
+                if (!empty($uploadedAudioFiles)) {
+                    $cueFilePath = getHomeDirectory() . '/.privateradiomanager/cue_file';
+                    $cueCount = 0;
+                    
+                    if (file_exists($cueFilePath) && is_executable($cueFilePath)) {
+                        foreach ($uploadedAudioFiles as $audioFile) {
+                            // Check if file already has liq_cue_file tag
+                            $checkCmd = 'ffprobe -v quiet -show_entries format_tags=liq_cue_file -of csv=p=0 ' . escapeshellarg($audioFile) . ' 2>/dev/null';
+                            exec($checkCmd, $checkOutput, $checkReturnCode);
+                            $hasLiqCueFile = !empty($checkOutput) && strtolower(trim($checkOutput[0])) === 'true';
+                            
+                            if (!$hasLiqCueFile) {
+                                logUploadProcessing("Running cue_file on {$audioFile}");
+                                $cueCommand = escapeshellarg($cueFilePath) . ' -w ' . escapeshellarg($audioFile) . ' 2>&1';
+                                exec($cueCommand, $cueOutput, $cueReturnCode);
+                                
+                                if (!empty($cueOutput)) {
+                                    logUploadProcessing("cue_file output: " . implode("\n", $cueOutput));
+                                }
+                                logUploadProcessing("cue_file exit code: {$cueReturnCode}");
+                                
+                                if ($cueReturnCode === 0) {
+                                    $cueCount++;
+                                }
+                                unset($cueOutput);
+                            } else {
+                                logUploadProcessing("Skipping cue_file (already has liq_cue_file tag): {$audioFile}");
+                            }
+                            unset($checkOutput);
+                        }
                     }
                 }
                 

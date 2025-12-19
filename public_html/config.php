@@ -54,6 +54,24 @@ function getPrivateConfig(): array
 
 $PRIVATE_CONFIG = getPrivateConfig();
 
+function getHomeDirectory(): string
+{
+    static $homeDir = null;
+    if ($homeDir !== null) {
+        return $homeDir;
+    }
+    
+    $homeDir = getenv('HOME');
+    if (!$homeDir && function_exists('posix_getuid') && function_exists('posix_getpwuid')) {
+        $pw = posix_getpwuid(posix_getuid());
+        if (is_array($pw) && isset($pw['dir'])) {
+            $homeDir = $pw['dir'];
+        }
+    }
+    
+    return $homeDir ?: '';
+}
+
 // Database configuration
 define('DB_HOST', $PRIVATE_CONFIG['DB_HOST'] ?? 'localhost');
 define('DB_NAME', $PRIVATE_CONFIG['DB_NAME'] ?? '');
